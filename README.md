@@ -1,19 +1,20 @@
 # evalsone-free-api
- Provides Evalsone unlimited API to all.
+ Provides Evalsone/DeepInfra/PollinationAI unlimited API to all.
 
 
 # !!!! VERY MUCH EXPERIMENTAL!
+# DO NOT USE THIS IN A PRODUCTION ENVIRONMENT.
 
-This project provides a Flask-based API server.
-
+I am not responsible for the usage of this script. If any of the owners of these services wants me to tkae it down off of this, simply contact me.
 
 
 ## Runtime Arguments
 - --proxy # to set a proxy
 - --verbose # to get all output
-- --no-logs # to disable logging to file
+- --disable-logs # to disable logging to file
+- --port # to set a port for the serv to run on
 
-make_acc script Arguments:
+make_es_acc script Arguments:
 - --no-cfg-writing # does not write to cfg.json, only makes an account
 - --verbose # outputs everything to console
 
@@ -23,39 +24,9 @@ make_acc script Arguments:
 
 - ITS FREE AND UNLIMITED!
 - OpenAI request and response structure!!!
-- Automatically creates a default `cfg.json` if not found.
-- Loads system configuration dynamically from `cfg.json`.
-- Fallback to default settings for missing configuration values.
-- Supports system messages (`sys_msg`) and port customization.
 - Includes detailed logging and verbosity options.
 - Integrated proxy support.
 
-
-## Configuration Defaults
-
-The default configuration is as follows:
-
-```json
-{
-    "auth_key": null,
-    "log_file": "logs.txt",
-    "verbose": false,
-    "proxy": null,
-    "logging_enabled": true,
-    "port": 80,
-    "sys_msg": "your an ai bru just work holy shit"
-}
-```
-
-### Explanation of Fields
-
-- **auth_key**: The authentication key for API access (required).
-- **log_file**: The file path where logs will be stored.
-- **verbose**: Boolean flag to enable or disable verbose output.
-- **proxy**: Proxy server to use for API requests (if any).
-- **logging_enabled**: Boolean flag to enable or disable logging.
-- **port**: The port on which the Flask server will run.
-- **sys_msg**: A default system message to use in the application.
 
 ## Getting Started
 
@@ -70,49 +41,86 @@ The default configuration is as follows:
 
 2. Install required Python libraries:
    ```bash
-   pip install flask asyncio selenium
+   pip3 install -r requirements.txt
    ```
-Note: Selenium is not needed if not using the make_acc script.
-
-3. Run the application:
+3: Make an Evalsone account:
    ```bash
-   python api.py
+   python3 make_es_acc.py
    ```
+This will return a key for Evalsone (you dont need this typically) and key for script which is your api key for using the script with
 
-### Initial Configuration
-
-When you first run the application, it will check for the presence of `cfg.json` in the current working directory. If the file is missing, a default `cfg.json` will be created. You will need to:
-
-1. Open `cfg.json` and set the `auth_key` to your API key, or run make_acc script.
-2. Optionally update other configuration values as needed.
+4. Run the application:
+   ```bash
+   python3 api.py
+   ```
 
 ## Usage
 
-- **Starting the Server**: The Flask server will run on the configured port (default is `80`). Access it at `http://localhost`.
-- **Logs**: If logging is enabled, logs will be saved to the file specified in the `log_file` field (default is `logs.txt`).
-- **System Message**: The system message (`sys_msg`) can be customized in the `cfg.json` file.
-- **Proxy**: If a proxy server is required, specify it in the `proxy` field, or at runtime (--proxy).
+- **Starting the Server**: The Flask server will run on the configured port (default is `80`). Access it at `http://127.0.0.1`.
+- **Logs**: If logging is enabled, logs will be saved to `logs.txt`.
+- **Proxy**: If a proxy server is required, specify it at runtime (--proxy).
+- Now, you can use the openai module to send and receive requests with the following models:
 
-## Error Handling
+## Models
 
-- If the `auth_key` is missing or invalid, the application will terminate with an error message.
-- Missing configuration fields in `cfg.json` will be automatically replaced with default values.
+The only important missing one is Claude 3.5 Sonnet.
 
+### Evalsone models
+claude-instant
+claude-2
+claude-2-1
+claude-3-haiku
+gpt-4o-mini
+gemini-1-5-flash
+claude-3-5-haiku
+gemini-2-flash
+
+### PollinationAI models
+
+gpt-4o
+mistral-nemo-evil
+o1-mini
+
+### DeepInfra models
+
+llama-3-8b
+lamma-3-70b
+deepseek-v3
+deepseek-r1
+deepseek-r1-llama
+deepseek-r1-qwen
+phi-4
+wizardlm-2-8x22b
+qwen-2-5-72b
+dolphin-2-6
+dolphin-2-9
+dbrx
+airoboros-70b
+lzlv-70b
+wizardlm-2-70b
+mixtral-8x22b
 
 ## FAQ
 
 make_acc script just hangs at signing up! what do i do!??
-that means you have sent too many requests to make an account. u should wait 10-15 mins until trying again.
+~~that means you have sent too many requests to make an account.~~ PATCHED, it nows tell you when that happens.
+this means that evalsone doesnt like the chosen email. i havent figured out what causes this, if it hangs for like more than 30 seconds just restart the script.
+theoritally alot more could be causing this but usually its just hanging at waiting for the email (some emails just dont receive it.)
 
+500 http error from deepinfra/evalsone/pai, what does this mean?
+that means an error occured on their end or something is fucked in the request. it may do that if you send a very large text for example.
 
+server overloaded from deepinfra
+this usually happens with deepseek-r1, its very popular and it should be self explanatory. alot of people is using it at the same time.
 
 ## Contributing
 
-Contributions are welcome! Please fork the repository and submit a pull request for review.
+contributions are welcome! submit a pull request for review.
 
 ## Contact
 
 For any questions or issues, feel free to open an issue on GitHub or contact me at:
 vincemartineau@outlook.com
 or Discord:
-vince.hd
+~~vince.hd~~ ban atm.
+darwiny7859

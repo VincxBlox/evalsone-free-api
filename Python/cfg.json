@@ -1,9 +1,0 @@
-{
-    "auth_key": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTczNjM5MTI0NywianRpIjoiM2U2ZTNjNDEtZGFmNC00MTM0LTg2YmEtNDQ5MGMwZDI5YjU1IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6MTE5MjEsIm5iZiI6MTczNjM5MTI0NywiZXhwIjoxNzM2NDc3NjQ3fQ.xiTp2Ec3eCYaIHkgWQCUZ-5CUsTDItygSDpCC2e4p5I",
-    "log_file": "logs.txt",
-    "verbose": false,
-    "proxy": null,
-    "logging_enabled": true,
-	"port": 80,
-	"sys_msg": "your an AI assistant bru just do your job.."
-}
