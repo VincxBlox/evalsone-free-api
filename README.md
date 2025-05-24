@@ -1,9 +1,10 @@
-# evalsone-free-api
- Provides Evalsone/DeepInfra/PollinationAI unlimited API to all.
+# AIDOC-free-api
+ Provides AIDOC unlimited API to all.
 
 
 # !!!! VERY MUCH EXPERIMENTAL!
 # DO NOT USE THIS IN A PRODUCTION ENVIRONMENT.
+# and its currently complete shit but it works
 
 I am not responsible for the usage of this script. If any of the owners of these services wants me to tkae it down off of this, simply contact me.
 
@@ -13,10 +14,6 @@ I am not responsible for the usage of this script. If any of the owners of these
 - --verbose # to get all output
 - --disable-logs # to disable logging to file
 - --port # to set a port for the serv to run on
-
-make_es_acc script Arguments:
-- --no-cfg-writing # does not write to cfg.json, only makes an account
-- --verbose # outputs everything to console
 
 
 
@@ -33,7 +30,9 @@ make_es_acc script Arguments:
 ### Prerequisites
 
 - Python 3.8+
-- Flask library
+- Flask
+- Flask-cors
+- aiohttp
 
 ### Installation
 
@@ -41,13 +40,13 @@ make_es_acc script Arguments:
 
 2. Install required Python libraries:
    ```bash
-   pip3 install -r requirements.txt
+   pip3 install flask flask-cors aiohttp
    ```
-3: Make an Evalsone account:
+3: pray that it works:
    ```bash
-   python3 make_es_acc.py
+   echo *praying*
    ```
-This will return a key for Evalsone (you dont need this typically) and key for script which is your api key for using the script with
+
 
 4. Run the application:
    ```bash
@@ -63,59 +62,55 @@ This will return a key for Evalsone (you dont need this typically) and key for s
 
 ## Models
 
-The only important missing one is Claude 3.5 Sonnet.
+gemini-2.0-flash  
+o4-mini  
+o4-mini-high  
+gpt-4o-mini  
+gpt-4o  
+claude-3-opus  
+claude-3.7-sonnet  (sometimes just doesnt work it depends)
+claude-3.5-sonnet  
+gemini-2.5-flash  
+deepseek-r1  
+qwen-qwq  
+llama-4-maverick  
+llama-4  
+llama-4-scout  
+llama-3.3  
+gemini-2.5-pro  
+o3-mini  
+gpt-4.1  
+gpt-4.1-mini
 
-### Evalsone models
-claude-instant
-claude-2
-claude-2-1
-claude-3-haiku
-gpt-4o-mini
-gemini-1-5-flash
-claude-3-5-haiku
-gemini-2-flash
-
-### PollinationAI models
-
-gpt-4o
-mistral-nemo-evil
-o1-mini
-
-### DeepInfra models
-
-llama-3-8b
-lamma-3-70b
-deepseek-v3
-deepseek-r1
-deepseek-r1-llama
-deepseek-r1-qwen
-phi-4
-wizardlm-2-8x22b
-qwen-2-5-72b
-dolphin-2-6
-dolphin-2-9
-dbrx
-airoboros-70b
-lzlv-70b
-wizardlm-2-70b
-mixtral-8x22b
+(read the models.json AIDOC part only to know the exact model. DI is in progress.)
 
 ## FAQ
 
-make_acc script just hangs at signing up! what do i do!??
-~~that means you have sent too many requests to make an account.~~ PATCHED, it nows tell you when that happens.
-this means that evalsone doesnt like the chosen email. i havent figured out what causes this, if it hangs for like more than 30 seconds just restart the script.
-theoritally alot more could be causing this but usually its just hanging at waiting for the email (some emails just dont receive it.)
 
-500 http error from deepinfra/evalsone/pai, what does this mean?
-that means an error occured on their end or something is fucked in the request. it may do that if you send a very large text for example.
+500 http error, what does this mean?
+that means an error occured on their end or something is fucked in the request. it may do that if you send a very large text for example too...
 
-server overloaded from deepinfra
-this usually happens with deepseek-r1, its very popular and it should be self explanatory. alot of people is using it at the same time.
+the ai says nothing???
+yea claude 3.7 usually does that, even when it reports http 200, and some others models sometimes
 
+conversation history issues?
+read the 3rd known issue.
 ## Contributing
 
 contributions are welcome! submit a pull request for review.
+
+
+## KNOWN ISSUES PLEASE READ
+It is not rare for it to simply not work, that happens
+
+The script does support sending streaming chunks, but the internal API DOES NOT, so there will be NO actual stream, but apps that depends on streaming will still work.
+
+There might be some issues with the CONVERSATION history. The endpoint works in a progressive messages system, so you can't pass existing messages throught the request, so the only solution i had was to tell it the past messages, and that usually works, but not always. It might start saying some shit like 
+   ```text
+   I understand you've provided conversation history and a new message, but I should respond as myself based on my actual capabilities and instructions. 
+   ```
+
+
 
 ## Contact
 
@@ -123,4 +118,3 @@ For any questions or issues, feel free to open an issue on GitHub or contact me 
 vincemartineau@outlook.com
 or Discord:
 ~~vince.hd~~ ban atm.
-darwiny7859
