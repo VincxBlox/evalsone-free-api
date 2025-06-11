@@ -24,6 +24,8 @@ CORS(app)
 LOG_FILE = "logs.txt"
 models_data = []
 current_auth_token = None
+current_system_message = None
+first_start = True
 
 def parse_args():
     parser = argparse.ArgumentParser(description='API Server')
@@ -112,6 +114,194 @@ async def get_new_auth_token(args=None):
     except Exception as e:
         log_message(f"Error getting auth token: {e}", "error", args)
         return None
+
+async def get_current_user_settings(args=None):
+    """Get current user settings to check custom instructions"""
+    global current_auth_token
+    
+    if not current_auth_token:
+        return None
+    
+    url = "https://api.aidocmaker.com/get_user"
+    params = {"client_url": "https://www.aidocmaker.com/chat"}
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:138.0) Gecko/20100101 Firefox/138.0",
+        "Accept": "application/json, text/plain, */*",
+        "Accept-Language": "en-US,fr;q=0.8,fr-FR;q=0.5,en;q=0.3",
+        "Accept-Encoding": "gzip, deflate, br, zstd",
+        "Authorization": current_auth_token,
+        "Origin": "https://www.aidocmaker.com",
+        "Sec-GPC": "1",
+        "Connection": "keep-alive",
+        "Referer": "https://www.aidocmaker.com/",
+        "Sec-Fetch-Dest": "empty",
+        "Sec-Fetch-Mode": "cors",
+        "Sec-Fetch-Site": "same-site",
+        "TE": "trailers"
+    }
+    
+    try:
+        async with aiohttp.ClientSession() as session:
+            async with session.get(url, headers=headers, params=params) as response:
+                if response.status == 200:
+                    data = await response.json()
+                    return data
+                else:
+                    log_message(f"Failed to get user settings: {response.status}", "error", args)
+                    return None
+    except Exception as e:
+        log_message(f"Error getting user settings: {e}", "error", args)
+        return None
+
+async def update_custom_instructions(system_message, args=None):
+    """Update custom instructions in AiDocMaker"""
+    global current_auth_token
+    
+    if not current_auth_token:
+        return False
+    
+    url = "https://api-internal.aidocmaker.com/save_user"
+    params = {"client_url": "https://www.aidocmaker.com/chat"}
+    
+    payload = {
+        "custom_instructions": system_message,
+        "profession": "",
+        "language": ""
+    }
+    
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:138.0) Gecko/20100101 Firefox/138.0",
+        "Accept": "application/json, text/plain, */*",
+        "Accept-Language": "en-US,fr;q=0.8,fr-FR;q=0.5,en;q=0.3",
+        "Accept-Encoding": "gzip, deflate, br, zstd",
+        "Content-Type": "application/json",
+        "Authorization": current_auth_token,
+        "Origin": "https://www.aidocmaker.com",
+        "Sec-GPC": "1",
+        "Connection": "keep-alive",
+        "Referer": "https://www.aidocmaker.com/",
+        "Sec-Fetch-Dest": "empty",
+        "Sec-Fetch-Mode": "cors",
+        "Sec-Fetch-Site": "same-site",
+        "Priority": "u=0",
+        "TE": "trailers"
+    }
+    
+    try:
+        async with aiohttp.ClientSession() as session:
+            async with session.post(url, json=payload, headers=headers, params=params) as response:
+                if response.status == 200:
+                    log_message(f"Successfully updated sys msg", "debug", args)
+                    return True
+                else:
+                    text = await response.text()
+                    log_message(f"Failed to update sys msg: {response.status} - {text}", "error", args)
+                    return False
+    except Exception as e:
+        log_message(f"Error updating custom instructions: {e}", "error", args)
+        return False
+
+async def clear_custom_instructions(args=None):
+    """Clear custom instructions in AiDocMaker"""
+    global current_auth_token
+    
+    if not current_auth_token:
+        return False
+    
+    url = "https://api-internal.aidocmaker.com/save_user"
+    params = {"client_url": "https://www.aidocmaker.com/chat"}
+    
+    payload = {
+        "custom_instructions": "",
+        "profession": "",
+        "language": ""
+    }
+    
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:138.0) Gecko/20100101 Firefox/138.0",
+        "Accept": "application/json, text/plain, */*",
+        "Accept-Language": "en-US,fr;q=0.8,fr-FR;q=0.5,en;q=0.3",
+        "Accept-Encoding": "gzip, deflate, br, zstd",
+        "Content-Type": "application/json",
+        "Authorization": current_auth_token,
+        "Origin": "https://www.aidocmaker.com",
+        "Sec-GPC": "1",
+        "Connection": "keep-alive",
+        "Referer": "https://www.aidocmaker.com/",
+        "Sec-Fetch-Dest": "empty",
+        "Sec-Fetch-Mode": "cors",
+        "Sec-Fetch-Site": "same-site",
+        "Priority": "u=0",
+        "TE": "trailers"
+    }
+    
+    try:
+        async with aiohttp.ClientSession() as session:
+            async with session.post(url, json=payload, headers=headers, params=params) as response:
+                if response.status == 200:
+                    log_message(f"Successfully cleared sys msg", "debug", args)
+                    return True
+                else:
+                    text = await response.text()
+                    log_message(f"Failed to clear sys msg: {response.status} - {text}", "error", args)
+                    return False
+    except Exception as e:
+        log_message(f"Error clearing sys msg: {e}", "error", args)
+        return False
+
+async def handle_system_message(messages, args=None):
+    """Handle system message by updating custom instructions"""
+    global current_system_message
+    global first_start
+    
+    # Find system message in messages
+    system_message = None
+    filtered_messages = []
+    
+    for message in messages:
+        if message.get("role") == "system":
+            system_message = message.get("content", "").strip()
+        else:
+            filtered_messages.append(message)
+    
+    # Get current user settings to check what's actually set in the backend
+    current_settings = await get_current_user_settings(args)
+    current_backend_instructions = ""
+    if current_settings:
+        current_backend_instructions = current_settings.get("custom_instructions", "").strip()
+    
+    # If no system message found, clear custom instructions if they were set
+    if not system_message:
+        if current_backend_instructions:
+            log_message("No system message found, clearing sys msg", "debug", args)
+            success = await clear_custom_instructions(args)
+            if success:
+                current_system_message = None
+            else:
+                log_message("Failed to clear sys msg", "error", args)
+        else:
+            log_message("No system message and backend already clear", "debug", args)
+        return filtered_messages
+    
+    # Check if system message is different from what's currently set in backend
+    if current_backend_instructions != system_message:
+        if not first_start:
+            log_message(f"System message differs from backend, updating sys msg", "debug", args)
+        else:
+            log_message(f"System message differs from backend (duh its first start, new token), updating sys msg", "debug", args)
+            first_start = False
+        log_message(f"Backend has: '{current_backend_instructions}'", "debug", args)
+        log_message(f"Updating to: '{system_message}'", "debug", args)
+        success = await update_custom_instructions(system_message, args)
+        if success:
+            current_system_message = system_message
+        else:
+            log_message("Failed to update sys msg", "error", args)
+    else:
+        log_message("System message matches backend, skipping update", "debug", args)
+        current_system_message = system_message
+    
+    return filtered_messages
 
 async def send_aidocmaker_request(messages, model_id, is_streaming=False, args=None):
     """Send request to AiDocMaker API"""
@@ -252,8 +442,11 @@ def chat_completions():
         is_streaming = data.get("stream", False)
         token_refreshed = False
 
+        # Handle system message and filter messages
+        filtered_messages = run_async_in_sync(handle_system_message(messages, args))
+
         # Make request to AiDocMaker
-        result, error = run_async_in_sync(send_aidocmaker_request(messages, model_info["model_id"], is_streaming, args))
+        result, error = run_async_in_sync(send_aidocmaker_request(filtered_messages, model_info["model_id"], is_streaming, args))
         
         # Handle token expiration
         if error == "token_expired":
@@ -261,7 +454,7 @@ def chat_completions():
             current_auth_token = run_async_in_sync(get_new_auth_token(args))
             if current_auth_token:
                 token_refreshed = True
-                result, error = run_async_in_sync(send_aidocmaker_request(messages, model_info["model_id"], is_streaming, args))
+                result, error = run_async_in_sync(send_aidocmaker_request(filtered_messages, model_info["model_id"], is_streaming, args))
             else:
                 return jsonify({"error": "Failed to refresh auth token"}), 401
         

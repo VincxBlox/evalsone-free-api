@@ -11,7 +11,7 @@ If any of the owners of these services wants me to take it down off of this, sim
 
 ## Runtime Arguments
 - --proxy; to set a proxy
-- --verbose; to get all output (i don't currently know if this works properly.)
+- --verbose; to get all output (~~i don't currently know if this works properly.~~ fixed)
 - --disable-logs; to disable logging to file
 - --port; to set a port for the serv to run on
 
@@ -102,7 +102,7 @@ contributions are welcome! submit a pull request for review.
 ## KNOWN ISSUES PLEASE READ
 It is not rare for it to simply not work, that happens
 
-The script does support sending streaming chunks, but the internal API DOES NOT, so there will be NO actual stream, but apps that depends on streaming will still work.
+The script does support sending streaming chunks, but the internal API DOES NOT, so there will be NO actual stream, but apps that depends on streaming will still work.If you do want streaming models, go back to the evalsone branch. I don,t think ill be updating it anymore tho. ill remove this when i can potentially get streaming models.
 
 There might be some issues with the CONVERSATION history. The endpoint works in a progressive messages system, so you can't pass existing messages throught the request, so the only solution i had was to tell it the past messages, and that usually works, but not always. It might start saying some stuff like 
    ```text
