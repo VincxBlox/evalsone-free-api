@@ -5,6 +5,7 @@
   {"model_id": "gpt-4o", "model_name": "gpt-4o", "provider": "AIDOC"},
   {"model_id": "claude-3-5-haiku-latest", "model_name": "claude-3.5-haiku", "provider": "AIDOC"},
   {"model_id": "claude-sonnet-4", "model_name": "claude-4-sonnet", "provider": "AIDOC"},
+  {"model_id": "mistral-saba-24b", "model_name": "mistral-saba-24b", "provider": "AIDOC"},
   {"model_id": "deepseek-r1-distill-llama-70b", "model_name": "deepseek-r1", "provider": "AIDOC"},
   {"model_id": "qwen-qwq-32b", "model_name": "qwen-qwq", "provider": "AIDOC"},
   {"model_id": "llama-4-maverick", "model_name": "llama-4-maverick", "provider": "AIDOC"},

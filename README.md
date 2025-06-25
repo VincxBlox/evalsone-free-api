@@ -1,5 +1,6 @@
 # AIDOC-free-api
  Provides AIDOC unlimited API to all.
+ inspired by the gpt4free project
 
 
 # !!!! VERY MUCH EXPERIMENTAL!
@@ -11,7 +12,7 @@ If any of the owners of these services wants me to take it down off of this, sim
 
 ## Runtime Arguments
 - --proxy; to set a proxy
-- --verbose; to get all output (~~i don't currently know if this works properly.~~ fixed)
+- --verbose; to get all output (very verbose..)
 - --disable-logs; to disable logging to file
 - --port; to set a port for the serv to run on
 
@@ -64,25 +65,44 @@ If any of the owners of these services wants me to take it down off of this, sim
 
 ## Models (june 6 update removed claude 3.5, 3.7, o4-mini-high)
 
-gemini-2.0-flash  
-o4-mini  
-gpt-4o-mini  
-gpt-4o  
+gemini-2.0-flash
+gemini-2.5-flash
+gemini-2.5-pro
+
+gpt-4o
+gpt-4o-mini
+gpt-4.1 
+gpt-4.1-mini
+o4-mini
+o3-mini   
+
 claude-4
-gemini-2.5-flash  
-deepseek-r1  
+claude-3.5-haiku
+deepseek-r1  (distill 70B)
 qwen-qwq  
+
 llama-4-maverick  
 llama-4  
 llama-4-scout  
 llama-3.3  
-gemini-2.5-pro  
-o3-mini  
-gpt-4.1  
-gpt-4.1-mini
 
-(read the models.json AIDOC part only to know the exact model. DI is in progress.)
 
+
+(read the models.json AIDOC part only to know the exact model. DI is back online, but too lazy to implement it for now.)
+
+
+## Functions
+
+i have implemented functions, so it can interact with files and the internet.
+in the request, simply send over a functions field with any of these
+
+browse_web
+generate_document
+generate_presentation
+generate_image (oolala)
+generate_spreadsheet
+
+i have not figured out the file uploading yet..
 ## FAQ
 
 
@@ -90,7 +110,7 @@ gpt-4.1-mini
 that means an error occured on their end or something is fucked in the request. it may do that if you send a very large text for example too...
 
 the ai says nothing???
-yea claude 3.7 usually does that, even when it reports http 200, and some others models sometimes
+yea some models may not be always working... and some may just not! i dont have the time to try every single one of them..
 
 conversation history issues?
 read the 3rd known issue.
@@ -108,9 +128,14 @@ There might be some issues with the CONVERSATION history. The endpoint works in 
    ```text
    I understand you've provided conversation history and a new message, but I should respond as myself based on my actual capabilities and instructions. 
    ```
-and when that happens, just try again a few more times..
+and when that happens, just try again a few more times, or use another model..
 
 
+
+## Things in Development
+- File Uploading
+- DeepInfra implementation
+- Sharing the load between AIDOCMAKER, Evalsone, and DeepInfra (using all 3 of them at the same time)
 
 ## Contact
 
