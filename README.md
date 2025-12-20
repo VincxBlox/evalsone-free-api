@@ -1,6 +1,7 @@
 # AIDOC-free-api
  Provides AIDOC unlimited API to all.
  inspired by the gpt4free project
+ As of 2025-12-19, it currently doesn't work due to their massive backend changes.
 
 
 # !!!! VERY MUCH EXPERIMENTAL!
